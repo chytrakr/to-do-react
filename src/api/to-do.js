@@ -35,9 +35,9 @@ export function AddToDoAPI(data) {
     })
 }
 
-export function GetToDoListAPI() {
+export function GetToDoListAPI(tag='') {
     return new Promise(function(resolve, reject) {
-        api(`to-do/list?id=${localStorage.userId ? localStorage.userId : ''}`)
+        api(`to-do/list?id=${localStorage.userId ? localStorage.userId : ''}&tag=${tag}`)
         .then((resp) => {
             return resolve(resp);
         }, (error) => {

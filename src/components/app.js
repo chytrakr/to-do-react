@@ -12,7 +12,8 @@ import Form from 'react-bootstrap/Form'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import {AddToDoAPI, GetToDoListAPI, UpdateToDoAPI, DeleteToDoAPI} from '../api/to-do'
-import { BsStop } from 'react-icons/bs';
+import { BsStop, BsX } from 'react-icons/bs';
+import {Badge} from "react-bootstrap";
 
 class AppComponent extends Component {
 	constructor(props) {
@@ -53,7 +54,6 @@ class AppComponent extends Component {
 	// Add item if user input in not empty
 	addItem(event){
 		if(event.code === 'Enter') {
-			debugger
 			AddToDoAPI({text: this.state.userInput, tag: this.state.selectedTag, tagColor: this.state.selectedTagColor}).then(resp => {
 				if(!localStorage.userId) {
 					localStorage.setItem('userId', resp.data._id);
@@ -62,10 +62,10 @@ class AppComponent extends Component {
 			})
 		}
 	}
-	getItems() {
-		GetToDoListAPI().then(resp => {
+	getItems(tag='') {
+		GetToDoListAPI(tag).then(resp => {
 			// Update list
-			const list = [...resp.docs[0] ? resp.docs[0].toDos : []];
+			const list = [...resp ? resp.data : []];
 			// reset state
 			this.setState({
 				list,
@@ -129,17 +129,16 @@ class AppComponent extends Component {
 							aria-label="add something"
 							aria-describedby="basic-addon2"
 						/>
-						{/* <InputGroup.Append>
-							<Button
-							variant="dark"
-							size="lg"
-							onClick = {()=>this.addItem()}
-							>
-							ADD
-							</Button>
-						</InputGroup.Append> */}
 					</InputGroup>
 				</Col>
+			</Row>
+			<Row>
+			<Col md={{ span: 5, offset: 4 }} style={{paddingBottom: 18}}>
+				<Button variant="primary" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('')} size="sm">All</Button>{' '}
+				<Button variant="secondary" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Other')} size="sm">Other</Button>{' '}
+				<Button variant="danger" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Work')} size="sm">Work</Button>{' '}
+				<Button variant="success" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Personal')} size="sm">Personal</Button>{' '}
+			</Col>
 			</Row>
 			<Row>
 				<Col md={{ span: 5, offset: 4 }}>
@@ -152,18 +151,13 @@ class AppComponent extends Component {
 							<Form.Group id="formGridCheckbox" style={{display: 'flex'}}>
 							<Form.Check type="checkbox" style={{width: 10}} className="my-1 mr-sm-2" onChange={e => this.UpdateToDo(!item.done, item._id)} checked={item.done}/>
 							{item.done ? <span style={{textDecoration: 'line-through', marginTop: 5, width: 380}}>{item.toDo}</span> : <span style={{marginTop: 5, width: 380}}>{item.toDo}</span>}
-							<BsStop style={{fontSize: 30, marginTop: 1, color: item.tagColor, float: 'right', width: 30}}/>
-							<Button
-								variant="secondary"
-								size="sm"
+							<BsStop style={{fontSize: 25, marginTop: 1, color: item.tagColor, float: 'right', width: 30}}/>
+							<BsX
 								onClick = { () => this.deleteItem(item._id) }
-								style={{float: 'right', borderRadius: '40%', marginLeft: 'auto', width: 30}}
-								>
-								X
-							</Button>		
+								style={{float: 'right', fontSize: 25, marginLeft: 'auto', width: 30}}
+								/>
 							</Form.Group>
 						</ListGroup.Item>
-
 					)})}
 					</ListGroup>
 				</Col>
