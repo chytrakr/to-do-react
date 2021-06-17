@@ -3,7 +3,6 @@ import axios from 'axios';
 let base = 'http://localhost:3000/api/v1/';
 
 export default function api(url, method='GET', data={}) {
-
 	return new Promise(function(resolve, reject) {
 	    const requestOptions = {
 	    	url: base + url,
@@ -13,7 +12,6 @@ export default function api(url, method='GET', data={}) {
 	        },
 	        data
 	    };
-
 	    axios(requestOptions)
 	  	.then(function (response) {
 			resolve(response.data);

@@ -27,7 +27,7 @@ class AppComponent extends Component {
 			selectedTagColor: "grey",
 			tags: [
 				{tagName: 'Other', color: 'grey'},
-				{tagName: 'Work', color: 'Red'},
+				{tagName: 'Work', color: 'red'},
 				{tagName: 'Personal', color: 'green'}
 			]
 		}
@@ -62,6 +62,8 @@ class AppComponent extends Component {
 			})
 		}
 	}
+
+	//Get to-do list
 	getItems(tag='') {
 		GetToDoListAPI(tag).then(resp => {
 			// Update list
@@ -105,9 +107,8 @@ class AppComponent extends Component {
 			<hr style={{marginTop: 0}}/>
 			<Row>
 				<Col md={{ span: 5, offset: 4 }}>
-
 					<InputGroup className="mb-3">
-					<DropdownButton
+						<DropdownButton
 							variant="outline-secondary"
 							id="input-group-dropdown-2"
 							title={this.state.selectedTag}
@@ -132,14 +133,16 @@ class AppComponent extends Component {
 					</InputGroup>
 				</Col>
 			</Row>
-			<Row>
-			<Col md={{ span: 5, offset: 4 }} style={{paddingBottom: 18}}>
-				<Button variant="primary" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('')} size="sm">All</Button>{' '}
-				<Button variant="secondary" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Other')} size="sm">Other</Button>{' '}
-				<Button variant="danger" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Work')} size="sm">Work</Button>{' '}
-				<Button variant="success" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Personal')} size="sm">Personal</Button>{' '}
-			</Col>
-			</Row>
+			{this.state.list.length ? 
+				<Row>
+					<Col md={{ span: 5, offset: 4 }} style={{paddingBottom: 18}}>
+						<Button variant="primary" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('')} size="sm">All</Button>{' '}
+						<Button variant="secondary" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Other')} size="sm">Other</Button>{' '}
+						<Button variant="danger" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Work')} size="sm">Work</Button>{' '}
+						<Button variant="success" style={{paddingTop: 0, paddingBottom: 0}} onClick={e => this.getItems('Personal')} size="sm">Personal</Button>{' '}
+					</Col>
+				</Row> : null
+			}
 			<Row>
 				<Col md={{ span: 5, offset: 4 }}>
 					<ListGroup>
@@ -155,7 +158,7 @@ class AppComponent extends Component {
 							<BsX
 								onClick = { () => this.deleteItem(item._id) }
 								style={{float: 'right', fontSize: 25, marginLeft: 'auto', width: 30}}
-								/>
+							/>
 							</Form.Group>
 						</ListGroup.Item>
 					)})}
